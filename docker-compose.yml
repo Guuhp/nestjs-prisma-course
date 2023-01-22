@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  course_nestJs:
+    image: postgres:latest
+    container_name: course_nestJs
+    environment:
+      POSTGRES_PASSWORD: admin
+    ports:
+      - '5432:5432'
