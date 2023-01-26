@@ -1,7 +1,6 @@
 import { CreateUserDTO } from './dto/create-user.dto';
 import { PrismaService } from './../prisma/prisma.service';
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { async } from 'rxjs';
 import { UpdatePutDTO } from './dto/update-put.dto';
 import { UpdatePartialDTO } from './dto/update-patch.dto';
 
@@ -28,20 +27,20 @@ export class UserService {
     })
   }
 
-  async update(id: number, { email, name, password, birthAt }: UpdatePutDTO) {
+  async update(id: number, { email, name, password, birthAt, role }: UpdatePutDTO) {
     console.log({ email, name, password });
     await this.existsUser(id)
 
     return this.prisma.user.update({
       data:
-        { email, name, password, birthAt: birthAt ? new Date(birthAt) : null },
+        { email, name, password, birthAt: birthAt ? new Date(birthAt) : null, role },
       where: {
         id
       }
     })
   }
 
-  async updatePartial(id: number, { email, name, password, birthAt }: UpdatePartialDTO) {
+  async updatePartial(id: number, { email, name, password, birthAt,role }: UpdatePartialDTO) {
     await this.existsUser(id)
 
     const data: any = {}
@@ -57,6 +56,9 @@ export class UserService {
     }
     if (password) {
       data.password = password
+    }
+    if (role) {
+      data.role = role
     }
     return this.prisma.user.update({
       data,
