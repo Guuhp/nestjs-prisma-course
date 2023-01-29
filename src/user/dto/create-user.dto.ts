@@ -13,7 +13,6 @@ export class CreateUserDTO {
   password: string;
 
   @IsOptional()
-  @IsDateString()
   birthAt: string;
 
   @IsOptional()

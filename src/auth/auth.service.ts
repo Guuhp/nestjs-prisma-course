@@ -6,6 +6,7 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UserService } from 'src/user/user.service';
 import { User } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -48,11 +49,11 @@ export class AuthService {
     }
   }
 
-  isValidToken(token:string){
-    try{
+  isValidToken(token: string) {
+    try {
       this.checkToken(token)
       return true
-    }catch(e){
+    } catch (e) {
       return false
     }
   }
@@ -61,16 +62,23 @@ export class AuthService {
   async login(email: string, password: string) {
     const user = await this.prisma.user.findFirst({
       where: {
-        email,
-        password
+        email
       }
     })
+    console.log(user);
 
     if (!user) {
       throw new UnauthorizedException(
         "user not found, check email and password"
       )
     }
+    //informação e eu quero comparar / a que esta em hash
+    if (!await bcrypt.compare(password, user.password)) {
+      throw new UnauthorizedException(
+        "user not found, check email and password"
+      )
+    }
+
     return this.createToken(user)
   }
 
