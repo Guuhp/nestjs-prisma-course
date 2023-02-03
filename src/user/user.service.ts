@@ -9,10 +9,9 @@ import * as bcrypt from 'bcrypt';
 export class UserService {
   constructor(private prisma: PrismaService) { }
 
-  async createUser(data: CreateUserDTO) {
+  async createUser(data: CreateUserDTO) {    
     const salt = await bcrypt.genSalt()
-    data.password = await bcrypt.hash(data.password,salt)
-
+    data.password = await bcrypt.hash(data.password, salt)
     return this.prisma.user.create({
       data
     })
@@ -63,7 +62,7 @@ export class UserService {
     if (password) {
       const salt = await bcrypt.genSalt()
       data.password = await bcrypt.hash(password, salt)
-      
+
     }
     if (role) {
       data.role = role

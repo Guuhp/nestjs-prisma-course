@@ -4,15 +4,17 @@ import { PrismaModule } from "src/prisma/prisma.module";
 import { UserModule } from "src/user/user.module";
 import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
+import { FileModule } from "src/file/file.module";
 
 
 @Module({
   imports: [
     JwtModule.register({
-      secret: `@9$ry#nV6@mGuJyuQ47A6!<~bbfHdm,`
+      secret: process.env.JWT_SECRET
     }),
     PrismaModule,
-    forwardRef(() => UserModule)
+    forwardRef(() => UserModule),
+    FileModule
   ],
   controllers: [AuthController],
   providers: [AuthService],
